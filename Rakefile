@@ -32,14 +32,12 @@ PKG_FILES = FileList[
 
 SRC_FILES = FileList[
   'src/scriptaculous.js',
-  'src/dragdrop.js',
-  'src/effects.js',
-  'src/controls.js',
-  'src/unittest.js',
   'src/builder.js',
+  'src/effects.js',
+  'src/dragdrop.js',
+  'src/controls.js',
   'src/slider.js',
   'src/sound.js',
-  'src/unittest.js'
 ]
 
 RAILS_FILES = FileList[
@@ -69,6 +67,11 @@ task :package do
   system %{cd #{PKG_DESTINATION}; tar -czvf #{PKG_FILE_NAME}.tar.gz #{PKG_FILE_NAME}}
   system %{cd #{PKG_DESTINATION}; zip -r #{PKG_FILE_NAME}.zip #{PKG_FILE_NAME}}
   system %{cd #{PKG_DESTINATION}; tar -c #{PKG_FILE_NAME} | bzip2 --best  > #{PKG_FILE_NAME}.tar.bz2 }
+  SRC_FILES.each do |file|
+  	File.open(File.join(PKG_DESTINATION, 'scriptaculous.js'), 'a+') do |dist|
+		dist << File.read(file)
+	end
+  end
 end
 
 desc "Update rails trunk to latest script.aculo.us"
